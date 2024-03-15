@@ -33,17 +33,19 @@ const uploadPhoto = multer({
 
 
 const productImgResize = async (req, res, next) => {
+  console.log("hola");
   if (!req.files) return next();
 await Promise.all(
   req.files.map(async (file) => {
+    //console.log(file.path);
   await sharp(file.path)
-    .resize(300, 300)
+    .resize(1000, 1000)
     .toFormat("jpeg")
     .jpeg({ quality: 90 })
-    .toFile(`public/images/products/${file.filename}`);
-    fs.unlinkSync(`public/images/products/${file.filename}`);
+    .toFile(`D:/tiendaAmber/giamshp/backend/public/images/products/${file.filename}`);
+    fs.unlinkSync(`D:/tiendaAmber/giamshp/backend/public/images/products/${file.filename}`);
 })
-);
+).catch(error => console.log(error));
   next();
 };
 

@@ -10,17 +10,18 @@ const instance = new Razorpay({
 
 
 const checkout = async (req, res) => {
-  const {amount} = req.body
-  const option = {
-        amount: amount * 100,
-        currency: "ARS"
-    }
+//   const {amount} = req.body
+//   const option = {
+//         amount: amount * 100,
+//         currency: "ARS"
+//     }
     
-const order = await instance.orders.create(option);
-    res.json({
-        success: true,
-        order
-    });
+// const order = await instance.orders.create(option);
+//     res.json({
+//         success: true,
+//         order
+//     });
+        res.send("WUU");
   };
 
 

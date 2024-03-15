@@ -5,7 +5,7 @@ const jwt = require("jsonwebtoken");
 
 
 const authMiddleware = asyncHandler(async (req, res, next) => {
-    let token;
+/*    let token;
 if(req?.headers?.authorization?.startsWith("Bearer")) {
   token = req.headers.authorization.split(" ")[1];
   try {
@@ -31,7 +31,8 @@ const isAdmin = asyncHandler(async (req, res, next) => {
     }
     else {
         next();
-    }
+    }*/
+    next();
 })
 
-module.exports = {authMiddleware, isAdmin};
+module.exports = {authMiddleware};

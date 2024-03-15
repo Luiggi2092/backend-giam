@@ -17,7 +17,7 @@ const uniqid = require("uniqid");
 
 const createUser = asyncHandler(async (req, res) => {
 
-
+console.log(req.body);
 //Crear Usuario
 const email = req.body.email;
 const findUser = await User.findOne({ email : email});
@@ -419,20 +419,31 @@ function compareFeatures(features1, features2) {
 
 
 const userCart = asyncHandler(async (req, res) => {
+  console.log("goo")
   const { productId, color, quantity, price } = req.body;
-  const { _id } = req.user;
-  validateMongoDbId(_id);
+  const id = req.params.id;
+  //console.log(req.user);
+  console.log(productId);
+  console.log(color);
+  console.log(quantity);
+  console.log(price);
+  console.log(req.body);
+  //validateMongoDbId(_id); 
+  console.log(id);
+  console.log("llego");
   try {
     let newCart = await new Cart({
-      userId:_id,
+      userId: id,
       productId,
       color,
       price,
       quantity
         }).save();
-    res.json(newCart);
+    console.log(newCart)
+    res.json({newCart});
   } catch (error) {
-    throw new Error(error);
+    //throw new Error(error);
+    console.log(error)
   }
 });
 
@@ -440,11 +451,15 @@ const userCart = asyncHandler(async (req, res) => {
 
 
 const removeProductFromCart = asyncHandler(async (req, res) => {
-  const { _id } = req.user;
-  const { cartItemId } = req.params;
-  validateMongoDbId(_id);
+  //const { _id } = req.user;
+  const id = req.params.id;
+  const userId = req.params.userId;
+  console.log("ay id :" + id);
+  console.log("tupi");
+  //validateMongoDbId(_id);
   try {
-    const deleteProductFromCart = await Cart.deleteOne({userId:_id, _id:cartItemId})
+    const deleteProductFromCart = await Cart.deleteOne({ productId:id,userId: userId});
+    console.log(deleteProductFromCart);
     res.json(deleteProductFromCart);
   } catch (error) {
     throw new Error(error);
@@ -469,13 +484,21 @@ const emptyCart = asyncHandler(async (req, res) => {
 
 
 const updateProductQuantityFromCart = asyncHandler(async (req, res) => {
-  const { _id } = req.user;
-  const { cartItemId, newQuantity } = req.params;
-  validateMongoDbId(_id);
+  //const { _id } = req.user;
+  const { id,userId } = req.params;
+  const {quantity} = req.query
+  console.log(req.query)
+  console.log(quantity);
+  console.log(id);
+  console.log(userId);
+  //validateMongoDbId(_id);
   try {
-    const cartItem = await Cart.findOne({ userId: _id, _id: cartItemId })
-    cartItem.quantity = newQuantity;
-    cartItem.save()
+    const cartItem = await Cart.findOne({ productId:id,userId: userId });
+    if(!cartItem){
+      return res.status(404).json({message: 'Producto no encontrado en el carrito del usuario' });
+    }
+    cartItem.quantity = quantity;
+    await cartItem.save()
     res.json(cartItem);
   } catch (error) {
     throw new Error(error);
@@ -486,26 +509,36 @@ const updateProductQuantityFromCart = asyncHandler(async (req, res) => {
 
 
 const getUserCart = asyncHandler(async (req, res) => {
-  const { _id } = req.user;
-  validateMongoDbId(_id);
-  try {
-    const cart = await Cart.find({ userId: _id }).populate(
-      "productId"
-    ).populate("color");
-    res.json(cart);
-  } catch (error) {
-    throw new Error(error);
-  }
+  
+  const userId = req.params.userId;
+  console.log(userId);
+  
+try {
+  // Busca documentos de la colección de carritos que corresponden al usuario específico.
+  if(userId){
+  const cart = await Cart.find({userId: userId}).populate("productId").populate("color");
+  const products = cart.map(item => item.productId);
+  console.log(cart);
+  console.log(products);
+  res.json({
+    cart
+  });
+}
+} catch (error) {
+  throw new Error(error);
+}
 });
 
 
 const createOrder = asyncHandler(async (req, res) => {
-  const { shippingInfo, orderItems, totalPrice, totalPriceAfterDiscount, paymentInfo } = req.body;
-  const { _id } = req.user;
+ 
+  console.log("llego aqui")
+  const { shippingInfo, orderItems, totalPrice, totalPriceAfterDiscount, OrderId } = req.body;
+  const  _id  = "65d9315d3c44da50e2558595";
   // validateMongoDbId(_id);
   try {
     const order = await Order.create({ 
-      shippingInfo, orderItems, totalPrice, totalPriceAfterDiscount, paymentInfo, user:_id
+      shippingInfo, orderItems, totalPrice, totalPriceAfterDiscount, OrderId , user:_id
      });
     res.json({
       order, 
@@ -521,7 +554,7 @@ const createOrder = asyncHandler(async (req, res) => {
                  ///////////////                          /////////////////////////////
                                                          //CONTROL de Ordenes Car//
 const getMyOrders = asyncHandler(async (req, res) => {
-const { _id } = req.user;
+//const { _id } = req.user;
   try {
 const orders = await Order.find({ user: _id })
        .populate("user")

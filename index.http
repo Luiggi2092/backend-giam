@@ -1,0 +1,145 @@
+//responde con un texto success lo utlice para mercado pago
+###    
+GET http://localhost:5000/api/payment/success
+
+//crea una orden en mercadopago
+###     
+POST http://localhost:5000/api/payment/create-order/
+###
+
+// consulta el estado del pago de la orden de compra en mercadopago
+GET https://api.mercadopago.com/v1/payments/1317307562
+Headers:
+  Content-Type: application/json
+  Authorization: Bearer TEST-2653742309143553-022519-2a65162f2c6e812047a243d2f463236c-1698409543
+
+//crea una orden de compra del cliente
+###    
+POST http://localhost:5000/api/user/cart/create-order
+Content-Type: application/json
+
+{   
+   "user": "65d9315d3c44da50e2558595",
+   "shippingInfo": {
+       "firstName": "Luis",
+       "lastName": "Seminario",
+       "address": "Calle Eugenio de la torre 163",
+       "city": "Lima",
+       "state": "Lima",
+       "other": "Otros detalles",
+       "pincode": 12345,
+       "country": "Argentina",
+       "costoenv": 100
+   },
+   "paymentInfo": {
+       "razorpayOrderId": "000001",
+       "razorpayPaymentId": "PAG00001"
+   },
+   "orderItems":[
+      {
+        "product": "65da436923c4208dcb01dffc",
+        "color": "65d938c93c44da50e255860a",
+        "quantity": 1,
+        "price": 39.99
+      },
+      {
+        "product": "65da43fc23c4208dcb01e01f",
+        "color": "65d938c93c44da50e255860a",
+        "quantity": 1,
+        "price": 39.99
+      }  
+   ],
+   
+  "paidAt": "2024-02-29T10:00:00.000Z",
+  "createdAt": "2024-02-29T10:00:00.000Z",
+  "month": "Febrero",
+  "totalPrice": 91.97,
+  "totalPriceAfterDiscount": 85.97,
+  "orderStatus": "Ordenado"
+   
+}
+
+//consulta el carrito de compra de un determinado cliente 
+###  
+GET http://localhost:5000/api/user/cart/65d9315d3c44da50e2558595
+
+
+
+// inicia sesion el cliente 
+### 
+POST http://localhost:5000/api/user/login
+Content-Type: application/json
+
+{ 
+  "email": "luiggi_lsl@hotmail.com", 
+  "password": "Luiggistone"
+  //"token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY1ZDkzMTVkM2M0NGRhNTBlMjU1ODU5NSIsImlhdCI6MTcwOTMyMzUwNywiZXhwIjoxNzA5NDk2MzA3fQ.qqyydy3H4rIMltILHVX07nX7KjsfHktglvUpJ-pPaUw" 
+}
+
+
+//elimina un producto del carrito de compra
+###
+DELETE http://localhost:5000/api/user/delete-product-cart/65e7e031d86db66753e817ff/65d9315d3c44da50e2558595/
+
+
+
+
+//actualiza la cantidad en el carro de compra 
+###
+PATCH http://localhost:5000/api/user/update-product-cart/65e7df89d86db66753e817e6/65d9315d3c44da50e2558595/?quantity=9
+
+
+
+
+
+
+//Agrega un producto al carro de compras
+###  
+POST http://localhost:5000/api/user/cart/add/65d9315d3c44da50e2558595
+Content-Type: application/json
+
+{
+  "productId": "65da43fc23c4208dcb01e01f",
+  "color": "65d938c93c44da50e255860a",
+  "price": 150,
+  "quantity": 2
+}
+
+//crear un producto al ecommerce 
+###
+POST  http:/localhost:5000/api/product
+Content-Type: : application/json
+
+{
+     "title": "Iphone 20",
+     "slug": "Iphone-20",
+     "description": "Ultima Tecnologia",
+     "price": 1500,
+
+}
+
+### 
+//crear categorias al producto
+POST http://localhost:5000/api/category
+Content-Type: application/json
+
+{
+    "title": "Gift Cards"
+}
+
+###
+// crear una marca de producto
+POST http://localhost:5000/api/brand
+Content-Type: application/json
+
+{
+    "title": "Dell"
+}
+
+
+
+
+
+
+
+

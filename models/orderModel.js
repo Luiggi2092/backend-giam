@@ -43,19 +43,24 @@ pincode: {
   type:Number,
   required: true,
 },
+country: {
+  type:String,
+  required:true,
+},
+costoenv:{
+  type:Number,
+  required: true, 
+},
 }, 
-
-paymentInfo: {
-  razorpayOrderId: {
+OrderId: {
     type:String,
     required: true,
 },
-
-  razorpayPaymentId: {
+PaymentId: {
     type: String,
-    required: true,
+    required: false,
 },
-},
+
 
 orderItems : [
   {

@@ -1,5 +1,5 @@
 //No Encontrado
-
+/*
 const notFound = (req, res, next) => {
     const error = new Error(`No Encontrado : ${req.originalUrl}`);
     res.status(404).json({ message: "Página no encontrada" }); // Envía una respuesta JSON con el mensaje de error
@@ -18,4 +18,4 @@ const statuscode = res.statusCode == 200 ? 500 : res.statusCode;
     });
 };
 
-module.exports={ errorHandler,notFound }
+module.exports={ errorHandler,notFound }*/
